@@ -1,9 +1,28 @@
 import React, { useState, useEffect } from 'react';
 import './ProductList.css'
 import CartItem from './CartItem';
+import { useDispatch, useSelector } from 'react-redux';
+import { addItem } from './CartSlice';
+
+
 function ProductList({ onHomeClick }) {
     const [showCart, setShowCart] = useState(false);
     const [showPlants, setShowPlants] = useState(false); // State to control the visibility of the About Us page
+    const [addedToCart, setAddedToCart] = useState();
+    const dispatch = useDispatch();
+
+
+    const handleAddToCart = (plant) => {
+        dispatch(addItem(plant));
+        console.log(`Adding ${plant.name}`);
+        setAddedToCart((prevState) => ({
+            ...prevState,
+            [plant.name] : true,
+        }));
+        console.log(`Added ${plant.name} to cart successfully`);
+        //Debugging
+        //console.log(`${addedToCart[plant.name]}`)
+    }
 
     const plantsArray = [
         {
@@ -274,7 +293,22 @@ function ProductList({ onHomeClick }) {
             </div>
             {!showCart ? (
                 <div className="product-grid">
-
+                    
+                        <ul className="product-list">
+                            {plantsArray.map((category, categoryIndex) => (
+                                category.plants.map((plant, plantIndex) => (
+                                <li className="product-card" key={plantIndex}>
+                                    <p className="product-title">{plant.name}</p><br></br>
+                                    <img className="product-image" src={plant.image}></img>
+                                    <p>{plant.description}</p>
+                                    <p className="product-price">{plant.cost}</p>
+                                    <br></br>
+                                    <button className="product-button" onClick={() => handleAddToCart(plant)}>Add to Cart</button>
+                                </li>
+                            ))
+                        ))}
+                        </ul>
+                    
 
                 </div>
             ) : (
