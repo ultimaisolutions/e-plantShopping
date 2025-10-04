@@ -15,6 +15,7 @@ function ProductList({ onHomeClick }) {
     const handleAddToCart = (plant) => {
         dispatch(addItem(plant));
         console.log(`Adding ${plant.name}`);
+        //setAddedToCart({[plant.name] : true}) //replaces the state entirely, removing previous plants
         setAddedToCart((prevState) => ({
             ...prevState,
             [plant.name] : true,
